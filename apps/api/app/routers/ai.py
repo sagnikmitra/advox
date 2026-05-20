@@ -65,7 +65,9 @@ def scenario(payload: ScenarioRequest) -> ScenarioResponse:
     try:
         generated = llm_client.generate(prompt)
     except LLMClientError:
-        generated = "Based on verified sources available in the system..."
+        generated = "\n\n".join(
+            f"**{chunk.citation_label}**\n{chunk.text}" for chunk in chunks[:6]
+        )
     citations = "\n".join(f"- {chunk.citation_label}" for chunk in chunks[:6])
     content = generated
     if transition:
@@ -108,7 +110,9 @@ def research(payload: ResearchRequest) -> ScenarioResponse:
     try:
         points = llm_client.generate(prompt)
     except LLMClientError:
-        points = "\n".join(f"- {chunk.text[:280]}" for chunk in chunks[:5])
+        points = "\n\n".join(
+            f"**{chunk.citation_label}**\n{chunk.text[:500]}" for chunk in chunks[:5]
+        )
     cites = "\n".join(f"- {item.citation_text}" for item in verification.items)
     content = f"Based on verified sources available in the system...\n\nExtracted points:\n{points}\n\nVerified citations:\n{cites}"
     return ScenarioResponse(content=inject_disclaimer(content))

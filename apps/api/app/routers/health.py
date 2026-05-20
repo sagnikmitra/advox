@@ -52,10 +52,13 @@ def readiness() -> dict:
 
 @router.get("/api/debug/retrieve")
 def debug_retrieve(q: str = "FIR", jurisdiction: str | None = None) -> dict:
+    from app.agents.legal_retriever import _extract_keywords
     try:
+        keywords = _extract_keywords(q)
         chunks = _retriever.retrieve(q, jurisdiction)
         return {
             "query": q,
+            "keywords": keywords,
             "count": len(chunks),
             "chunks": [
                 {"citation": c.citation_label, "text": c.text[:200]}
@@ -63,4 +66,5 @@ def debug_retrieve(q: str = "FIR", jurisdiction: str | None = None) -> dict:
             ],
         }
     except Exception as exc:
-        return {"error": str(exc)}
+        import traceback
+        return {"error": str(exc), "traceback": traceback.format_exc()}

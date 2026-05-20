@@ -1,0 +1,10 @@
+{
+  "name": "advox",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm --prefix frontend/advox-frontend run dev",
+    "build": "npm --prefix frontend/advox-frontend run build",
+    "lint": "npm --prefix frontend/advox-frontend run lint"
+  }
+}

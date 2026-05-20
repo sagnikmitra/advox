@@ -1,0 +1,27 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/advox_ticketing
+    username: advoxspace
+    password: advox123
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none  # keep schema as we created it manually
+    show-sql: true   # helpful for debugging
+    properties:
+      hibernate:
+        format_sql: true
+
+jwt:
+  secret: y5L@9N9a&fH^Gv7mWz@qPxJ!sV*D3#cB$uMn7Rz%LgXeK4AvTqZ0^WhbUo2KmNtp
+  algorithm: HS512
+  expiration-millis: 7200000
+
+gateway:
+  secret: secret-123
+
+

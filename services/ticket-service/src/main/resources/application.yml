@@ -1,0 +1,12 @@
+server:
+  port: 8082  # ticket-service runs on 8082
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/advox_tickets
+
+logging:
+  level:
+    root: INFO
+    com.advox.ticketservice: DEBUG

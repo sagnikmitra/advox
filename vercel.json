@@ -1,0 +1,11 @@
+{
+  "installCommand": "npm install --prefix frontend/advox-frontend",
+  "buildCommand": "npm run build",
+  "outputDirectory": "frontend/advox-frontend/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}

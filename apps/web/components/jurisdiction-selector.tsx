@@ -2,12 +2,10 @@ const STATES = ["Delhi", "West Bengal", "Maharashtra", "Karnataka", "Tamil Nadu"
 
 export function JurisdictionSelector() {
   return (
-    <select className="h-10 rounded-md border border-hairline bg-canvas px-3 text-sm text-ink" defaultValue="">
+    <select className="input-rect" defaultValue="">
       <option value="">Select State</option>
       {STATES.map((state) => (
-        <option key={state} value={state}>
-          {state}
-        </option>
+        <option key={state} value={state}>{state}</option>
       ))}
     </select>
   );

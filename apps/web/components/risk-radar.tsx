@@ -9,11 +9,11 @@ const RISKS = [
 
 export function RiskRadar() {
   return (
-    <div className="dark-card">
-      <h3 className="text-lg font-medium">Risk Radar</h3>
-      <ul className="mt-3 grid gap-2 text-sm text-[#d8d4ce] md:grid-cols-2">
+    <div className="rounded-lg bg-surface-tile-1 p-6">
+      <p className="text-body-strong text-on-dark">Risk Radar</p>
+      <ul className="mt-4 grid gap-2 md:grid-cols-2">
         {RISKS.map((risk) => (
-          <li key={risk} className="rounded border border-[#3c3935] px-3 py-2">
+          <li key={risk} className="rounded-sm border border-[rgba(255,255,255,0.08)] px-4 py-3 text-caption text-body-muted">
             {risk}
           </li>
         ))}

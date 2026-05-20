@@ -43,40 +43,51 @@ export function LegalChat({ persona }: { persona: "layman" | "advocate" }) {
   }
 
   return (
-    <div className="card">
-      <h3 className="text-lg font-medium">{persona === "layman" ? "Layman Legal Assistant" : "Advocate Legal Assistant"}</h3>
-      <div className="mt-3 grid gap-3 md:grid-cols-2">
+    <div className="utility-card">
+      <p className="text-body-strong text-ink">
+        {persona === "layman" ? "Legal Assistant" : "Advocate Assistant"}
+      </p>
+      <div className="mt-4 grid gap-3 md:grid-cols-2">
         <input
           value={state}
           onChange={(e) => setState(e.target.value)}
-          className="h-10 rounded-md border border-hairline bg-canvas px-3 text-sm"
+          className="input-rect"
           placeholder="State / jurisdiction"
         />
         <input
           value={incidentDate}
           onChange={(e) => setIncidentDate(e.target.value)}
           type="date"
-          className="h-10 rounded-md border border-hairline bg-canvas px-3 text-sm"
+          className="input-rect"
         />
       </div>
       <textarea
         value={message}
         onChange={(e) => setMessage(e.target.value)}
-        className="mt-3 h-36 w-full rounded-md border border-hairline bg-canvas px-3 py-2 text-sm"
+        className="mt-3 w-full rounded-lg border border-hairline bg-canvas px-4 py-3 text-body text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+        rows={5}
         placeholder="Describe legal situation, jurisdiction, dates, and documents"
       />
-      <p className="mt-2 text-xs text-warning">{TRANSITION_WARNING}</p>
+      <p className="mt-2 text-caption text-warning">{TRANSITION_WARNING}</p>
       <button
         onClick={handleRun}
         disabled={loading || message.trim().length < 5}
-        className="mt-4 h-10 rounded-md bg-primary px-4 text-sm font-medium text-white disabled:opacity-60"
+        className="btn-primary mt-4 disabled:opacity-50"
       >
-        {loading ? "Running..." : "Run legal workflow"}
+        {loading ? "Running…" : "Run legal workflow"}
       </button>
 
-      {route && <p className="mt-3 text-xs uppercase tracking-wide text-muted">route: {route}</p>}
-      {error && <p className="mt-2 text-sm text-error">{error}</p>}
-      {response && <pre className="mt-3 whitespace-pre-wrap rounded-md border border-hairline bg-canvas p-3 text-sm text-body">{response}</pre>}
+      {route && (
+        <p className="mt-4 text-caption text-ink-muted-48">
+          Route: <span className="text-caption-strong text-ink">{route}</span>
+        </p>
+      )}
+      {error && <p className="mt-3 text-caption text-error">{error}</p>}
+      {response && (
+        <pre className="mt-4 whitespace-pre-wrap rounded-lg border border-hairline bg-canvas-parchment p-5 text-caption text-ink-muted-80">
+          {response}
+        </pre>
+      )}
     </div>
   );
 }

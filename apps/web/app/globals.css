@@ -2,30 +2,111 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --canvas: #faf9f5;
-  --ink: #141413;
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: #ffffff;
+    color: #1d1d1f;
+    font-family: "SF Pro Text", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 17px;
+    line-height: 1.47;
+    letter-spacing: -0.374px;
+  }
+
+  ::selection {
+    background: rgba(0, 102, 204, 0.15);
+  }
 }
 
-html,
-body {
-  background: var(--canvas);
-  color: var(--ink);
-  font-family: StyreneB, Inter, sans-serif;
-}
+@layer components {
+  .page-shell {
+    @apply mx-auto max-w-content px-6 md:px-10;
+  }
 
-.display-serif {
-  font-family: Copernicus, "Tiempos Headline", serif;
-}
+  .page-shell-wide {
+    @apply mx-auto max-w-grid px-6 md:px-10;
+  }
 
-.page-shell {
-  @apply mx-auto max-w-6xl px-6 py-8 md:px-10;
-}
+  .tile {
+    @apply w-full px-6 py-section text-center md:px-10;
+  }
 
-.card {
-  @apply rounded-lg border border-hairline bg-surface-card p-6;
-}
+  .tile-light {
+    @apply tile bg-canvas text-ink;
+  }
 
-.dark-card {
-  @apply rounded-lg bg-surface-dark p-6 text-canvas;
+  .tile-parchment {
+    @apply tile bg-canvas-parchment text-ink;
+  }
+
+  .tile-dark {
+    @apply tile bg-surface-tile-1 text-on-dark;
+  }
+
+  .tile-dark-2 {
+    @apply tile bg-surface-tile-2 text-on-dark;
+  }
+
+  .tile-dark-3 {
+    @apply tile bg-surface-tile-3 text-on-dark;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-pill bg-primary px-[22px] py-[11px] text-body font-normal text-on-primary transition-transform active:scale-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-pill border border-primary bg-transparent px-[22px] py-[11px] text-body font-normal text-primary transition-transform active:scale-95;
+  }
+
+  .btn-dark-utility {
+    @apply inline-flex items-center justify-center rounded-sm bg-ink px-[15px] py-[8px] text-btn-utility text-on-dark transition-transform active:scale-95;
+  }
+
+  .btn-pearl {
+    @apply inline-flex items-center justify-center rounded-md border-[3px] border-divider-soft bg-surface-pearl px-[14px] py-[8px] text-caption text-ink-muted-80 transition-transform active:scale-95;
+  }
+
+  .btn-store-hero {
+    @apply inline-flex items-center justify-center rounded-pill bg-primary px-7 py-[14px] text-btn-large text-on-primary transition-transform active:scale-95;
+  }
+
+  .link-blue {
+    @apply text-primary no-underline hover:underline;
+  }
+
+  .link-blue-dark {
+    @apply text-primary-on-dark no-underline hover:underline;
+  }
+
+  .utility-card {
+    @apply rounded-lg border border-hairline bg-canvas p-6;
+  }
+
+  .chip {
+    @apply inline-flex items-center rounded-pill border border-hairline bg-canvas px-4 py-3 text-caption text-ink;
+  }
+
+  .chip-selected {
+    @apply chip border-2 border-primary-focus;
+  }
+
+  .input-apple {
+    @apply h-[44px] rounded-pill border border-[rgba(0,0,0,0.08)] bg-canvas px-5 text-body text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20;
+  }
+
+  .input-rect {
+    @apply h-[44px] rounded-sm border border-hairline bg-canvas px-4 text-body text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary/20;
+  }
+
+  .headline-tight {
+    font-family: "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.28px;
+  }
 }

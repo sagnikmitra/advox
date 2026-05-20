@@ -18,7 +18,7 @@ class LLMClient:
     def _gemini_generate(self, prompt: str) -> str:
         if not self.gemini_api_key:
             raise LLMClientError("GEMINI_API_KEY is not configured")
-        models = [self.model, "gemini-1.5-flash-latest", "gemini-1.5-pro-latest", "gemini-1.0-pro"]
+        models = [self.model, "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"]
         payload = {
             "contents": [{"parts": [{"text": prompt}]}],
             "generationConfig": {

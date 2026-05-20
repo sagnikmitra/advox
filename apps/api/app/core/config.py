@@ -11,9 +11,9 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379/0"
     supabase_secret_key: str = ""
     llm_provider: str = "gemini"
-    llm_model: str = "gemini-1.5-flash"
+    llm_model: str = "gemini-2.0-flash"
     gemini_api_key: str = ""
-    basic_auth_enabled: bool = True
+    basic_auth_enabled: bool = False
     basic_auth_user: str = "admin"
     basic_auth_password: str = "change-me"
 

@@ -13,6 +13,7 @@ class Settings(BaseSettings):
     llm_provider: str = "gemini"
     llm_model: str = "gemini-2.0-flash"
     gemini_api_key: str = ""
+    gemini_api_keys: str = ""
     basic_auth_enabled: bool = False
     basic_auth_user: str = "admin"
     basic_auth_password: str = "change-me"

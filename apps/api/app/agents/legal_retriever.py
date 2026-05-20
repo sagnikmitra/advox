@@ -48,7 +48,6 @@ class LegalRetrievalAgent:
 
         where_keywords = " OR ".join(like_clauses)
 
-        # Score by number of keyword hits for ranking
         score_parts = []
         for i in range(len(keywords)):
             key = f"kw{i}"
@@ -56,6 +55,11 @@ class LegalRetrievalAgent:
                 f"(CASE WHEN lsc.normalized_text ILIKE %({key})s THEN 1 ELSE 0 END)"
             )
         score_expr = " + ".join(score_parts) if score_parts else "0"
+
+        jurisdiction_clause = ""
+        if jurisdiction:
+            jurisdiction_clause = "AND (ls.jurisdiction_state = %(jurisdiction)s OR ls.jurisdiction_state IS NULL)"
+            params["jurisdiction"] = jurisdiction
 
         sql = f"""
             SELECT
@@ -74,7 +78,7 @@ class LegalRetrievalAgent:
             WHERE ls.verification_status = 'verified'
               AND ls.index_status = 'indexed'
               AND ({where_keywords})
-              AND (%(jurisdiction)s IS NULL OR ls.jurisdiction_state = %(jurisdiction)s OR ls.jurisdiction_state IS NULL)
+              {jurisdiction_clause}
             ORDER BY
               ({score_expr}) DESC,
               CASE ls.authority_level

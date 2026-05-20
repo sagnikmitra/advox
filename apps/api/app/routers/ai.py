@@ -19,6 +19,8 @@ from app.schemas.ai import (
 from app.services.disclaimer_service import inject_disclaimer
 from app.services.llm_client import LLMClient, LLMClientError
 
+LANG_NAMES = {"en": "English", "hi": "Hindi", "bn": "Bengali"}
+
 router = APIRouter(prefix="/api/ai", tags=["ai"])
 gateway = GatewayRouterAgent()
 scenario_agent = ScenarioProcedureAgent()
@@ -55,7 +57,7 @@ def scenario(payload: ScenarioRequest) -> ScenarioResponse:
     context = "\n\n".join(f"{chunk.citation_label}\n{chunk.text[:900]}" for chunk in chunks[:6])
     prompt = (
         f"Persona: {payload.persona}\n"
-        f"Language: {payload.language}\n"
+        f"Language: {LANG_NAMES.get(payload.language, payload.language)}\n"
         f"State: {payload.state or 'unknown'}\n"
         f"Incident Date: {payload.incident_date or 'unknown'}\n\n"
         "Task: Provide legal information and procedural guidance only from the verified context. "
@@ -101,7 +103,7 @@ def research(payload: ResearchRequest) -> ScenarioResponse:
     context = "\n\n".join(f"{chunk.citation_label}\n{chunk.text[:900]}" for chunk in chunks[:8])
     prompt = (
         f"Persona: {payload.persona}\n"
-        f"Language: {payload.language}\n"
+        f"Language: {LANG_NAMES.get(payload.language, payload.language)}\n"
         f"State: {payload.state or 'unknown'}\n\n"
         "Task: Produce concise legal research notes using only verified context below. "
         "Do not add claims not present in context.\n\n"

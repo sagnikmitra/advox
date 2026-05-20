@@ -12,6 +12,7 @@ app = FastAPI(title=settings.app_name)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["https://advox.sgnk.ai", "http://localhost:3000"],
+    allow_origin_regex=r"https://advox-.*-sagnik\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
 )

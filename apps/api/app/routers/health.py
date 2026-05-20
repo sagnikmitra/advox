@@ -66,5 +66,4 @@ def debug_retrieve(q: str = "FIR", jurisdiction: str | None = None) -> dict:
             ],
         }
     except Exception as exc:
-        import traceback
-        return {"error": str(exc), "traceback": traceback.format_exc()}
+        return {"error": str(exc)}

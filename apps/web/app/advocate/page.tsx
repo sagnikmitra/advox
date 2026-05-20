@@ -1,5 +1,5 @@
 import { AdvocateWorkspace } from "@/components/advocate-workspace";
-import { LegalChat } from "@/components/legal-chat";
+import { LegalChatWrapper } from "@/components/legal-chat-wrapper";
 import Link from "next/link";
 
 export default function AdvocatePage() {
@@ -44,7 +44,7 @@ export default function AdvocatePage() {
             <button className="btn-primary">Create workspace</button>
           </div>
 
-          <LegalChat persona="advocate" />
+          <LegalChatWrapper persona="advocate" />
           <AdvocateWorkspace />
         </div>
       </section>

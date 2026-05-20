@@ -1,7 +1,7 @@
 import { EmergencyBanner } from "@/components/emergency-banner";
 import { JurisdictionSelector } from "@/components/jurisdiction-selector";
 import { LanguageSelector } from "@/components/language-selector";
-import { LegalChat } from "@/components/legal-chat";
+import { LegalChatWrapper } from "@/components/legal-chat-wrapper";
 import Link from "next/link";
 
 export default function AskPage() {
@@ -41,7 +41,7 @@ export default function AskPage() {
             </Link>
           </div>
 
-          <LegalChat persona="layman" />
+          <LegalChatWrapper persona="layman" />
 
           <div className="utility-card text-left">
             <p className="text-body-strong text-ink">Output format</p>

@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     legal_transition_date: str = "2024-07-01"
     database_url: str = ""
     redis_url: str = "redis://localhost:6379/0"
+    supabase_url: str = ""
+    supabase_anon_key: str = ""
     supabase_secret_key: str = ""
     llm_provider: str = "gemini"
     llm_model: str = "gemini-2.0-flash"

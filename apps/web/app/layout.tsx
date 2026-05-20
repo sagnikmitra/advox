@@ -2,6 +2,8 @@ import "./globals.css";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { DisclaimerBar } from "@/components/disclaimer-bar";
+import { AuthProvider } from "@/lib/auth";
+import { NavAuth } from "@/components/nav-auth";
 
 export const metadata = {
   title: "Advox — Indian Legal AI",
@@ -12,6 +14,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <body>
+        <AuthProvider>
         <nav className="sticky top-0 z-50 flex h-[44px] items-center justify-between bg-surface-black px-5 md:px-10">
           <div className="flex items-center gap-7">
             <Link href="/" className="font-display text-nav-link font-semibold tracking-tight text-on-dark">
@@ -32,11 +35,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               </Link>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <Link href="/admin/sources" className="text-nav-link text-on-dark/80 transition-colors hover:text-on-dark">
-              Admin
-            </Link>
-          </div>
+          <NavAuth />
         </nav>
         <main>{children}</main>
         <DisclaimerBar />
@@ -73,6 +72,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
           </div>
         </footer>
+      </AuthProvider>
       </body>
     </html>
   );

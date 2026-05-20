@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.basic_auth import BasicAuthMiddleware
 from app.core.config import settings
-from app.routers import admin, ai, documents, health, sources
+from app.routers import admin, ai, documents, health, sources, users
 
 app = FastAPI(title=settings.app_name)
 
@@ -22,4 +22,5 @@ app.include_router(ai.router)
 app.include_router(documents.router)
 app.include_router(sources.router)
 app.include_router(admin.router)
+app.include_router(users.router)
 app.include_router(health.router)

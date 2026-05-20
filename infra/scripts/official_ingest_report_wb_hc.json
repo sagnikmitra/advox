@@ -1,0 +1,98 @@
+{
+  "total": 14,
+  "ingest_success": 1,
+  "verify_success": 1,
+  "blocked": 0,
+  "failed": 13,
+  "items": [
+    {
+      "url": "https://njdg.ecourts.gov.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://districts.ecourts.gov.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.calcuttahighcourt.gov.in/",
+      "ingest": {
+        "job_id": "08fe6b2b-1001-4fb0-9adb-37325c578065",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1010)",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://www.calcuttahighcourt.gov.in/Judgements",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.calcuttahighcourt.gov.in/CauseList",
+      "ingest": {
+        "job_id": "69bac695-af88-471b-8678-4505f4070bf8",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1010)",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://www.wb.gov.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.wblc.gov.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://delhihighcourt.nic.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://delhihighcourt.nic.in/judgments",
+      "ingest": {
+        "job_id": "bc4657eb-f1df-492f-ba51-8d11851aa5fd",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: Client error '404 Not Found' for url 'https://delhihighcourt.nic.in/judgments'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://bombayhighcourt.nic.in/",
+      "ingest": {
+        "job_id": "667bdeae-75d4-46a2-871c-105266cd5ed4",
+        "status": "success",
+        "source_id": "e3fb4ef0-84fb-4d43-a679-0a6ded4ccef6",
+        "title": "bulk_official_wb_hc :: https://bombayhighcourt.nic.in/",
+        "reason": "Source discovered/fetched/parsed and pending verification",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      },
+      "verify": {
+        "source_name": "bulk_official_wb_hc",
+        "status": "success",
+        "source_id": "e3fb4ef0-84fb-4d43-a679-0a6ded4ccef6",
+        "chunks_indexed": 1
+      }
+    },
+    {
+      "url": "https://bombayhighcourt.nic.in/judgment.php",
+      "ingest": {
+        "job_id": "8c846cc4-34a7-4f09-ad4c-71d604eb9524",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: Client error '404 Not Found' for url 'https://bombayhighcourt.nic.in/judgment.php'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://mhc.tn.gov.in/judis",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://karnatakajudiciary.kar.nic.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://karnatakajudiciary.kar.nic.in/newwebsite/judgments",
+      "error": "ingest_http_error:The read operation timed out"
+    }
+  ]
+}

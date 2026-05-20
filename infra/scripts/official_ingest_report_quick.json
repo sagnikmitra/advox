@@ -1,0 +1,127 @@
+{
+  "total": 12,
+  "ingest_success": 5,
+  "verify_success": 3,
+  "blocked": 0,
+  "failed": 9,
+  "items": [
+    {
+      "url": "https://www.indiacode.nic.in/",
+      "ingest": {
+        "job_id": "8ac3a477-8d9c-456b-9344-9db7f1cdd7c6",
+        "status": "success",
+        "source_id": "ab8be073-3f1f-40ae-8c95-4f43bd8fbd84",
+        "title": "bulk_official :: https://www.indiacode.nic.in/",
+        "reason": "Source discovered/fetched/parsed and pending verification",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      },
+      "verify": {
+        "source_name": "bulk_official",
+        "status": "success",
+        "source_id": "ab8be073-3f1f-40ae-8c95-4f43bd8fbd84",
+        "chunks_indexed": 2
+      }
+    },
+    {
+      "url": "https://www.indiacode.nic.in/handle/123456789/20062",
+      "ingest": {
+        "job_id": "8ba4c2cd-cfb3-42d1-95a5-88a677fe5977",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: Client error '404 Not Found' for url 'https://www.indiacode.nic.in/handle/123456789/20062'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://www.indiacode.nic.in/handle/123456789/20063",
+      "ingest": {
+        "job_id": "ad204375-4c8c-4b1e-84f8-9869e72ccc76",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: Client error '404 Not Found' for url 'https://www.indiacode.nic.in/handle/123456789/20063'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://www.indiacode.nic.in/handle/123456789/2263",
+      "ingest": {
+        "job_id": "4d73b6b7-3dd6-4f02-9294-225cecac98ae",
+        "status": "failed",
+        "reason": "Ingestion pipeline error: Client error '404 Not Found' for url 'https://www.indiacode.nic.in/handle/123456789/2263'\nFor more information check: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/404",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      }
+    },
+    {
+      "url": "https://legislative.gov.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://egazette.gov.in/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.sci.gov.in/",
+      "ingest": {
+        "job_id": "7eb5cdcc-1bef-47a3-859f-e851ac361ce1",
+        "status": "success",
+        "source_id": "b2b2fa35-fae4-4064-a2fe-15fcae720652",
+        "title": "bulk_official :: https://www.sci.gov.in/",
+        "reason": "Source discovered/fetched/parsed and pending verification",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      },
+      "verify_error": "verify_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.sci.gov.in/judgements/",
+      "ingest": {
+        "job_id": "cd39f2f5-d827-4833-a27b-429e849e0d35",
+        "status": "success",
+        "source_id": "b5a010a3-5ed1-4437-872a-f0426b21c7ae",
+        "title": "bulk_official :: https://www.sci.gov.in/judgements/",
+        "reason": "Source discovered/fetched/parsed and pending verification",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      },
+      "verify_error": "verify_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.sci.gov.in/cause-list/",
+      "error": "ingest_http_error:The read operation timed out"
+    },
+    {
+      "url": "https://www.sci.gov.in/daily-orders/",
+      "error": "ingest_http_error:HTTP Error 500: Internal Server Error"
+    },
+    {
+      "url": "https://services.ecourts.gov.in/",
+      "ingest": {
+        "job_id": "3caddf0e-dca7-4e50-a3eb-a7c6b3ec6efc",
+        "status": "success",
+        "source_id": "f89273d5-df67-4dac-b7f0-cee1b19119d1",
+        "title": "bulk_official :: https://services.ecourts.gov.in/",
+        "reason": "Source discovered/fetched/parsed and pending verification",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      },
+      "verify": {
+        "source_name": "bulk_official",
+        "status": "success",
+        "source_id": "f89273d5-df67-4dac-b7f0-cee1b19119d1",
+        "chunks_indexed": 2
+      }
+    },
+    {
+      "url": "https://judgments.ecourts.gov.in/",
+      "ingest": {
+        "job_id": "694d50f5-79bc-458e-b6c3-84a2b2052a40",
+        "status": "success",
+        "source_id": "3c88d4ec-0de5-4f6a-9d16-042e26b8950a",
+        "title": "bulk_official :: https://judgments.ecourts.gov.in/",
+        "reason": "Source discovered/fetched/parsed and pending verification",
+        "queue_warning": "Error 111 connecting to localhost:6379. Connection refused."
+      },
+      "verify": {
+        "source_name": "bulk_official",
+        "status": "success",
+        "source_id": "3c88d4ec-0de5-4f6a-9d16-042e26b8950a",
+        "chunks_indexed": 1
+      }
+    }
+  ]
+}

@@ -1,94 +1,168 @@
-# Advox v1
+# Advox (MVP Foundation)
 
-Advox v1 is a multi-service legal support platform with:
-- a React + Vite frontend
-- a Spring Cloud Gateway entry point
-- Spring Boot microservices for authentication and ticketing
-- a separate scraping service (routed through the gateway)
+Advox is a safety-first, citation-gated legal information system for India with two product flows:
+- Layman procedural guidance (`/ask`)
+- Advocate research and case workspace (`/advocate`)
 
-## Repository Structure
+## What it does
+- Routes legal queries into scenario mapping, document analysis, statute lookup, and research workflows.
+- Enforces verified-source-first behavior for legal assertions.
+- Blocks unsafe authoritative rendering when citations cannot be verified.
+- Implements ingestion connectors and compliance-safe scraping boundaries (no CAPTCHA bypass, no login scraping).
+- Supports incident-date-aware criminal law transition logic (IPC/CrPC/Evidence Act vs BNS/BNSS/BSA).
+- Provides multilingual-ready interfaces and glossary schema.
 
-- `frontend/advox-frontend`: React 19 + TypeScript UI
-- `services/gateway-service`: API gateway, JWT verification, request routing
-- `services/login-service`: authentication and user profile APIs
-- `services/ticket-service`: ticketing service skeleton
+## What it does not do
+- Does not provide final legal advice.
+- Does not create attorney-client relationship.
+- Does not invent statutes, citations, case names, or deadlines.
+- Does not bypass CAPTCHA, scrape login portals, or scrape private e-filing systems.
 
-## Current Architecture and Flow
+## Monorepo structure
+- `apps/web`: Next.js App Router frontend.
+- `apps/api`: FastAPI orchestration backend, RAG and ingestion stubs.
+- `infra/db/migrations`: PostgreSQL + pgvector migrations.
+- `infra/scripts`: seed SQL.
+- `docs`: safety, policy, architecture, contracts.
 
-1. Frontend calls `http://localhost:8080/login/api/...` via Axios.
-2. Gateway routes:
-   - `/login/**` -> login-service (`http://localhost:8081`)
-   - `/tickets/**` -> ticket-service (`http://localhost:8082`)
-   - `/scrape/**` -> scraping-service (`http://localhost:8000`)
-3. Gateway validates JWT on protected routes and injects user headers (`X-USER-ID`, etc).
-4. Login service validates `X-GATEWAY-AUTH` for incoming requests from gateway.
-5. Login/profile endpoints support:
-   - `POST /api/auth/login`
-   - `POST /api/auth/register`
-   - `GET /api/auth/me`
-   - `PUT /api/auth/me`
+## Local setup
+### 1. Prerequisites
+- Node.js 20+
+- Python 3.11+
+- Docker + Docker Compose
+- pnpm 9+
 
-## Ports
+### 2. Configure environment
+```bash
+cp .env.example .env
+```
+Set `BASIC_AUTH_USER` and `BASIC_AUTH_PASSWORD` before exposing the app.
 
-- Frontend dev server: `5173`
-- Gateway service: `8080`
-- Login service: `8081`
-- Ticket service: `8082`
-- Scraping service (expected): `8000`
+### 3. Start infrastructure
+```bash
+docker compose up -d postgres redis minio
+```
 
-## Tech Stack
+### 4. Install dependencies
+```bash
+pnpm install
+```
 
-- Frontend: React, TypeScript, React Router, Axios, Vite
-- Backend: Java 17+, Spring Boot, Spring Cloud Gateway
-- Datastores:
-  - Login service -> PostgreSQL (`advox_ticketing`)
-  - Ticket service -> MongoDB (`advox_tickets`)
-- Auth: JWT (HS512)
+### 5. Run frontend
+```bash
+pnpm --filter web dev
+```
 
-## Prerequisites
+### 6. Run backend
+```bash
+cd apps/api
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .[dev]
+uvicorn app.main:app --reload --port 8000
+```
 
-- Node.js 20+ and npm
-- Java 17+
-- Maven (or use each service's Maven wrapper)
-- PostgreSQL running locally
-- MongoDB running locally
+### 6.1 Basic auth behavior
+- Web app uses Next.js middleware basic auth.
+- API uses FastAPI middleware basic auth.
+- Health endpoints (`/api/health`, `/api/readiness`) remain unauthenticated for probes.
 
-## Run the Project Locally
+### 7. Run migrations
+Use your migration runner of choice (Alembic/Flyway/psql). Example:
+```bash
+psql "$DATABASE_URL" -f infra/db/migrations/001_init_extensions.sql
+psql "$DATABASE_URL" -f infra/db/migrations/002_users_and_tenants.sql
+psql "$DATABASE_URL" -f infra/db/migrations/003_legal_sources.sql
+psql "$DATABASE_URL" -f infra/db/migrations/004_documents_and_chunks.sql
+psql "$DATABASE_URL" -f infra/db/migrations/005_ai_audit_and_citations.sql
+psql "$DATABASE_URL" -f infra/db/migrations/006_ingestion_jobs.sql
+psql "$DATABASE_URL" -f infra/db/migrations/007_advocate_workspace.sql
+psql "$DATABASE_URL" -f infra/db/migrations/008_glossary_and_translations.sql
+```
 
-### 1) Start backend services
+### 8. Run tests
+```bash
+cd apps/api
+pytest
+```
 
-In separate terminals:
+## Environment variables
+See `.env.example` for all values. Key vars:
+- `DATABASE_URL`
+- `REDIS_URL`
+- `S3_ENDPOINT`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY`
+- `LLM_PROVIDER`, `LLM_MODEL`
+- `EMBEDDING_PROVIDER`, `EMBEDDING_MODEL`
+- `LEGAL_TRANSITION_DATE` (default `2024-07-01`)
+- `BASIC_AUTH_ENABLED`
+- `BASIC_AUTH_USER`
+- `BASIC_AUTH_PASSWORD`
 
-- Gateway:
-  - `cd services/gateway-service`
-  - `./mvnw spring-boot:run`
-- Login service:
-  - `cd services/login-service`
-  - `./mvnw spring-boot:run`
-- Ticket service:
-  - `cd services/ticket-service`
-  - `./mvnw spring-boot:run`
+## Ingestion policy
+- Allowlisted official/public legal sources only.
+- Robots and rate-limit checks before fetch.
+- CAPTCHA/login detection causes job block.
+- Every fetched document must be checksummed and source tagged.
+- Only `verification_status='verified'` and `index_status='indexed'` data is available for citation-backed RAG.
 
-### 2) Start frontend
+## Source verification policy
+- Citation verification agent validates section/paragraph and source link references.
+- Any `unverified`, `conflicting`, or `missing` citation blocks authoritative advocate output.
+- Layman flow fails closed for unsupported legal assertions.
 
-- `cd frontend/advox-frontend`
-- `npm install`
-- `npm run dev`
+## Security notes
+- Privacy-first by design with PII redaction before model calls.
+- TTL-based document retention default.
+- Tenant/user boundary model built into schema.
+- Avoid raw prompt persistence by default (`prompt_hash` + redacted prompt).
+- Basic auth enforced across frontend and backend for hosted baseline protection.
 
-### 3) Open app
+## Legal disclaimer
+LEGAL DISCLAIMER:
+This AI agent provides legal information and procedural guidance based on the Indian legal framework, including BNS, BNSS, and BSA where applicable. It does not constitute formal legal advice, representation, or an attorney-client relationship. AI performance can vary; verify all critical citations, deadlines, and strategies with a certified legal practitioner before acting.
 
-- `http://localhost:5173`
+## Roadmap
+### Phase 1: MVP Foundation
+- Persona UI
+- Basic legal chat
+- Upload parser
+- RAG schema
+- Source ingestion stubs
+- Citation verifier
+- Disclaimer
+- PII scrubber
 
-## Notes and Current Status
+### Phase 2: Verified Legal Corpus
+- India Code ingestion
+- Constitution ingestion
+- BNS/BNSS/BSA ingestion
+- Supreme Court judgments
+- High Court judgments
+- Legal glossary
+- Manual source review dashboard
 
-- Frontend is wired to gateway endpoint `http://localhost:8080/login/api`.
-- Route protection is implemented in frontend using auth context and token presence.
-- Gateway CORS is configured for local frontend usage.
-- Ticket service is currently a minimal skeleton with health endpoint.
+### Phase 3: Advocate Workspace
+- Case folders
+- Document timelines
+- Strategy notes
+- Draft generation
+- Precedent comparison
+- Procedural deadline tracker
 
-## Next Recommended Improvements
+### Phase 4: Layman Vernacular Product
+- Hindi/Bengali support
+- Legalese simplifier
+- Step-by-step procedural workflows
+- Legal aid/handoff directory
+- State-specific workflows
 
-- Move secrets and DB credentials to environment variables.
-- Add Docker Compose for one-command local startup.
-- Add module-level README files for each service.
-- Add tests for auth flow (gateway + login-service integration).
+### Phase 5: Production Compliance
+- Tenant isolation
+- Audit trails
+- Encryption
+- ZDR contracts
+- Admin review
+- Monitoring
+- Security testing
+- Rate limiting
+- Abuse prevention

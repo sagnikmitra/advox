@@ -1,10 +1,11 @@
 {
-  "name": "advox",
+  "name": "advox-platform",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.1.0",
+  "packageManager": "pnpm@9.12.3",
   "scripts": {
-    "dev": "npm --prefix frontend/advox-frontend run dev",
-    "build": "npm --prefix frontend/advox-frontend run build",
-    "lint": "npm --prefix frontend/advox-frontend run lint"
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm --filter web build",
+    "lint": "pnpm --filter web lint"
   }
 }

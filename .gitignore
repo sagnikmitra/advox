@@ -1,82 +1,22 @@
-# ----------------------------
-# OS / system files
-# ----------------------------
-.DS_Store
-Thumbs.db
-
-# ----------------------------
-# IDE / editor
-# ----------------------------
-.idea/
-.vscode/
-*.iml
-*.ipr
-*.iws
-.classpath
-.project
-.settings/
-.sts4-cache/
-
-# ----------------------------
-# Logs
-# ----------------------------
-*.log
-logs/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# ----------------------------
-# Environment / local secrets
-# ----------------------------
-.env
-.env.*
-!.env.example
-*.local
-
-# ----------------------------
-# Node / frontend artifacts
-# ----------------------------
+# node
+node_modules/
 **/node_modules/
-**/dist/
-**/dist-ssr/
-**/.vite/
-coverage/
+.next/
 
-# ----------------------------
-# Java / Maven / Spring artifacts
-# ----------------------------
-**/target/
-**/build/
-*.class
-*.jar
-*.war
-*.ear
-
-# Keep Maven wrapper JAR tracked when present
-!**/.mvn/wrapper/maven-wrapper.jar
-
-# ----------------------------
-# Python artifacts (for scraping service, if Python-based)
-# ----------------------------
-**/__pycache__/
+# python
+.venv/
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
-.pytest_cache/
-.venv/
-venv/
+*.egg-info/
 
-# ----------------------------
-# Temporary files
-# ----------------------------
-*.tmp
-*.swp
-*.swo
+# env
+.env
 
-# Generated analysis
-graphify-out/
-.vercel/
-.vercel
+# os
+.DS_Store
+
+# build
+coverage/
+dist/

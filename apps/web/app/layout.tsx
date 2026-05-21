@@ -2,6 +2,7 @@ import "./globals.css";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { DisclaimerBar } from "@/components/disclaimer-bar";
+import { ErrorBoundary } from "@/components/error-boundary";
 import { AuthProvider } from "@/lib/auth";
 import { NavAuth } from "@/components/nav-auth";
 
@@ -40,7 +41,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
           <NavAuth />
         </nav>
+        <ErrorBoundary>
         <main>{children}</main>
+        </ErrorBoundary>
         <DisclaimerBar />
         <footer className="bg-canvas-parchment px-6 pb-8 pt-16 md:px-10">
           <div className="mx-auto max-w-content">

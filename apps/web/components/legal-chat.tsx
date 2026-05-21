@@ -6,6 +6,7 @@ import { runScenario, routeMessage } from "@/lib/api";
 import { TRANSITION_WARNING } from "@/lib/constants";
 import { useAuth } from "@/lib/auth";
 import { supabase } from "@/lib/supabase";
+import { MarkdownContent } from "@/components/markdown-content";
 
 type Message = {
   id: string;
@@ -181,9 +182,11 @@ export function LegalChat({ persona }: { persona: "layman" | "advocate" }) {
                 {msg.role === "user" ? "You" : "Advox"}
                 {msg.route && ` · ${msg.route}`}
               </p>
-              <pre className="whitespace-pre-wrap text-caption text-ink-muted-80">
-                {msg.content}
-              </pre>
+              {msg.role === "assistant" ? (
+                <MarkdownContent content={msg.content} />
+              ) : (
+                <p className="text-caption text-ink-muted-80">{msg.content}</p>
+              )}
             </div>
           ))}
           <div ref={messagesEndRef} />

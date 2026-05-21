@@ -20,11 +20,18 @@ class LLMClient:
         self._api_keys = self._collect_keys()
 
     def _collect_keys(self) -> list[str]:
+        seen: set[str] = set()
         keys: list[str] = []
         if settings.gemini_api_keys:
-            keys.extend(k.strip() for k in settings.gemini_api_keys.split(",") if k.strip())
-        if settings.gemini_api_key and settings.gemini_api_key not in keys:
-            keys.append(settings.gemini_api_key)
+            for k in settings.gemini_api_keys.split(","):
+                k = k.strip()
+                if k and k not in seen:
+                    seen.add(k)
+                    keys.append(k)
+        if settings.gemini_api_key:
+            k = settings.gemini_api_key.strip()
+            if k and k not in seen:
+                keys.append(k)
         return keys
 
     def _build_model_list(self) -> list[str]:

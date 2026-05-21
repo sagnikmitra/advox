@@ -13,6 +13,11 @@ from app.services.ecourts_client import (
 router = APIRouter(prefix="/api/courts", tags=["courts"])
 
 
+def _escape_like(value: str) -> str:
+    """Escape ILIKE wildcard characters in user input."""
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 @router.get("")
 def list_courts(
     court_type: str | None = None,
@@ -30,8 +35,9 @@ def list_courts(
             conditions.append("state_code = %s")
             params.append(state_code.upper())
         if q:
+            escaped = _escape_like(q)
             conditions.append("(name ILIKE %s OR district_name ILIKE %s OR state_name ILIKE %s)")
-            params.extend([f"%{q}%", f"%{q}%", f"%{q}%"])
+            params.extend([f"%{escaped}%", f"%{escaped}%", f"%{escaped}%"])
 
         where = f"WHERE {' AND '.join(conditions)}" if conditions else ""
         rows = fetch_all(
@@ -82,22 +88,7 @@ def court_stats() -> dict:
         return {"stats": {}}
 
 
-@router.get("/{court_id}")
-def get_court(court_id: str) -> dict:
-    try:
-        row = fetch_one(
-            "SELECT id::text, name, short_name, court_type, state_code, state_name, "
-            "district_name, bench, address, website, ecourt_code, ecourt_state_code, "
-            "ecourt_district_code, is_active "
-            "FROM courts WHERE id = %s",
-            (court_id,),
-        )
-        if not row:
-            return {"error": "Court not found"}
-        return row
-    except DatabaseError as exc:
-        return {"error": str(exc)}
-
+# --- Case search routes MUST come before /{court_id} to avoid path conflict ---
 
 @router.get("/case/parse-cnr")
 def parse_cnr_number(cnr: str) -> dict:
@@ -123,3 +114,22 @@ async def search_case(cnr: str = Query(..., min_length=16, max_length=20)) -> di
         "case_history": result.case_history,
         "error": result.error if result.error else None,
     }
+
+
+# --- Dynamic path param MUST come last ---
+
+@router.get("/{court_id}")
+def get_court(court_id: str) -> dict:
+    try:
+        row = fetch_one(
+            "SELECT id::text, name, short_name, court_type, state_code, state_name, "
+            "district_name, bench, address, website, ecourt_code, ecourt_state_code, "
+            "ecourt_district_code, is_active "
+            "FROM courts WHERE id = %s",
+            (court_id,),
+        )
+        if not row:
+            return {"error": "Court not found"}
+        return row
+    except DatabaseError as exc:
+        return {"error": str(exc)}

@@ -15,6 +15,11 @@ class RetrievedChunk:
     verified: bool
 
 
+def _escape_like(value: str) -> str:
+    """Escape ILIKE wildcard characters in user input."""
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 STOP_WORDS = frozenset(
     "a an the is are was were be been being have has had do does did will would "
     "shall should may might can could of in to for on with at by from as into "
@@ -44,7 +49,7 @@ class LegalRetrievalAgent:
             like_clauses.append(
                 f"(lsc.normalized_text ILIKE %({key})s OR ls.title ILIKE %({key})s)"
             )
-            params[key] = f"%{kw}%"
+            params[key] = f"%{_escape_like(kw)}%"
 
         where_keywords = " OR ".join(like_clauses)
 

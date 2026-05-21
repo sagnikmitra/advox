@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import UTC, datetime
 
 import httpx
 from bs4 import BeautifulSoup
@@ -135,7 +135,7 @@ def parse_case_html(html: str, cnr: str) -> CaseStatus:
     result = CaseStatus(
         cnr_number=cnr,
         raw_html=html,
-        fetched_at=datetime.utcnow().isoformat(),
+        fetched_at=datetime.now(UTC).isoformat(),
         source="ecourts",
     )
 
@@ -226,7 +226,7 @@ async def fetch_case_by_cnr(cnr: str) -> CaseStatus:
 
     result = CaseStatus(
         cnr_number=parsed["cnr"],
-        fetched_at=datetime.utcnow().isoformat(),
+        fetched_at=datetime.now(UTC).isoformat(),
         source="ecourts",
     )
 

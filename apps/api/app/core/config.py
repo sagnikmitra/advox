@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     supabase_url: str = ""
     supabase_anon_key: str = ""
     supabase_secret_key: str = ""
+    supabase_jwt_secret: str = ""
     llm_provider: str = "gemini"
     llm_model: str = "gemini-2.0-flash"
     gemini_api_key: str = ""

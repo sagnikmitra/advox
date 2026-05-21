@@ -1,12 +1,16 @@
 from __future__ import annotations
 
-from fastapi import APIRouter
+import os
+
+from fastapi import APIRouter, HTTPException, Query
 
 from app.core.config import settings
 from app.rag.retriever import VerifiedRetriever
 
 router = APIRouter(tags=["health"])
 _retriever = VerifiedRetriever()
+
+_DEBUG_ENABLED = os.getenv("DEBUG_ENDPOINTS", "false").lower() == "true"
 
 
 @router.get("/api/health")
@@ -52,6 +56,8 @@ def readiness() -> dict:
 
 @router.get("/api/debug/retrieve")
 def debug_retrieve(q: str = "FIR", jurisdiction: str | None = None) -> dict:
+    if not _DEBUG_ENABLED:
+        raise HTTPException(status_code=404, detail="Not found")
     from app.agents.legal_retriever import _extract_keywords
     try:
         keywords = _extract_keywords(q)

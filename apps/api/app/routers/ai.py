@@ -22,12 +22,20 @@ from app.services.llm_client import LLMClient, LLMClientError
 LANG_NAMES = {"en": "English", "hi": "Hindi", "bn": "Bengali"}
 
 router = APIRouter(prefix="/api/ai", tags=["ai"])
-gateway = GatewayRouterAgent()
+
+
+def _get_gateway() -> GatewayRouterAgent:
+    return GatewayRouterAgent()
+
+
+def _get_llm() -> LLMClient:
+    return LLMClient()
+
+
 scenario_agent = ScenarioProcedureAgent()
 citation_agent = CitationVerificationAgent()
 translator = TranslationAgent()
 retriever = VerifiedRetriever()
-llm_client = LLMClient()
 
 NON_LEGAL_REFUSAL = (
     "I can only help with Indian legal information, legal procedure, court-document analysis, "
@@ -37,11 +45,12 @@ NON_LEGAL_REFUSAL = (
 
 @router.post("/route", response_model=RouteResponse)
 def route_message(payload: RouteRequest) -> RouteResponse:
-    return gateway.route(payload)
+    return _get_gateway().route(payload)
 
 
 @router.post("/scenario", response_model=ScenarioResponse)
-def scenario(payload: ScenarioRequest) -> ScenarioResponse:
+async def scenario(payload: ScenarioRequest) -> ScenarioResponse:
+    gateway = _get_gateway()
     routed = gateway.route(payload)
     if routed.route == "refusal":
         return ScenarioResponse(content=inject_disclaimer(NON_LEGAL_REFUSAL), blocked=True)
@@ -65,7 +74,8 @@ def scenario(payload: ScenarioRequest) -> ScenarioResponse:
         f"User Query:\n{payload.message}\n\nVerified Context:\n{context}\n"
     )
     try:
-        generated = llm_client.generate(prompt)
+        llm = _get_llm()
+        generated = await llm.generate_async(prompt)
     except LLMClientError:
         generated = "\n\n".join(
             f"**{chunk.citation_label}**\n{chunk.text}" for chunk in chunks[:6]
@@ -88,7 +98,7 @@ def analyze_document(payload: ScenarioRequest) -> ScenarioResponse:
 
 
 @router.post("/research", response_model=ScenarioResponse)
-def research(payload: ResearchRequest) -> ScenarioResponse:
+async def research(payload: ResearchRequest) -> ScenarioResponse:
     chunks = retriever.retrieve(payload.query, payload.state)
     if not chunks:
         return ScenarioResponse(
@@ -110,7 +120,8 @@ def research(payload: ResearchRequest) -> ScenarioResponse:
         f"Research Query:\n{payload.query}\n\nVerified Context:\n{context}\n"
     )
     try:
-        points = llm_client.generate(prompt)
+        llm = _get_llm()
+        points = await llm.generate_async(prompt)
     except LLMClientError:
         points = "\n\n".join(
             f"**{chunk.citation_label}**\n{chunk.text[:500]}" for chunk in chunks[:5]
@@ -126,14 +137,15 @@ def verify_citations(payload: CitationVerificationRequest) -> CitationVerificati
 
 
 @router.post("/translate", response_model=ScenarioResponse)
-def translate(payload: ScenarioRequest) -> ScenarioResponse:
+async def translate(payload: ScenarioRequest) -> ScenarioResponse:
     prompt = (
         f"Translate the following legal text into '{payload.language}'. "
         "Preserve legal meaning and keep citations unchanged.\n\n"
         f"{payload.message}"
     )
     try:
-        translated = llm_client.generate(prompt)
+        llm = _get_llm()
+        translated = await llm.generate_async(prompt)
     except LLMClientError:
         translated = translator.translate(payload.message, payload.language)
     return ScenarioResponse(content=inject_disclaimer(translated))
@@ -141,6 +153,7 @@ def translate(payload: ScenarioRequest) -> ScenarioResponse:
 
 @router.post("/refusal-check", response_model=ScenarioResponse)
 def refusal_check(payload: ScenarioRequest) -> ScenarioResponse:
+    gateway = _get_gateway()
     if gateway.is_legal_query(payload.message):
         raise HTTPException(status_code=400, detail="Query is legal; refusal not applicable")
     return ScenarioResponse(content=inject_disclaimer(NON_LEGAL_REFUSAL), blocked=True)

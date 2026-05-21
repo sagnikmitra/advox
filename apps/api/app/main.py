@@ -5,6 +5,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.basic_auth import BasicAuthMiddleware
 from app.core.config import settings
+from app.core.logging import configure_logging
+from app.core.rate_limit import RateLimitMiddleware
+
+configure_logging()
 from app.routers import admin, ai, courts, documents, health, sources, users
 
 app = FastAPI(title=settings.app_name)
@@ -15,8 +19,10 @@ app.add_middleware(
     allow_origin_regex=r"https://advox-.*-sagnik\.vercel\.app",
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=True,
 )
 app.add_middleware(BasicAuthMiddleware)
+app.add_middleware(RateLimitMiddleware)
 
 app.include_router(ai.router)
 app.include_router(documents.router)

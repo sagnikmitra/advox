@@ -23,3 +23,6 @@ __pycache__/
 coverage/
 dist/
 .vercel
+
+# SGNK continuity snapshots (local working memory)
+.sgnk/
